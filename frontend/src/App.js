@@ -4,18 +4,32 @@ import Axios from 'axios';
 import { GeoJSON } from 'react-leaflet';
 
 import counties from "./GeoJson/counties.json"
+import states from "./GeoJson/states.json"
 
 import "./App.css"
 
 function App() {
 
+  const [stateView, setStateView] = useState(true);
+
+  const stateName = (state, layer) => {
+    layer.on({
+      click: (event) => {
+        setStateView(false);
+      }
+    })
+  };
   return (
-    <MapContainer center={[-76.9839, 39.0704]} zoom={13}>
-      <GeoJSON style={{fillOpacity: 0}} data={counties.features}/>
-    </MapContainer>
+    stateView ? (
+      <MapContainer center={[38.484726, -98.38017]} zoom={5}>
+        <GeoJSON style={{ fillOpacity: 0, weight: 2 }} data={states.features} onEachFeature={stateName} />
+      </MapContainer>
+    ) : (
+      <MapContainer center={[38.484726, -98.38017]} zoom={8}>
+        <GeoJSON style={{ fillOpacity: 0, weight: 2 }} data={counties.features} onEachFeature={stateName} />
+      </MapContainer>
+    )
   );
 
-
 }
-
 export default App;
