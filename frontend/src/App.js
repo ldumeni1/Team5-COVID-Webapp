@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { GeoJSON } from 'react-leaflet';
 
@@ -10,25 +10,27 @@ import "./App.css"
 
 function App() {
 
-  const [stateView, setStateView] = useState(true);
+  const [view, setView] = useState("state");
 
-  const stateName = (state, layer) => {
+  const hoverStyle = {color: "black", weight: 4};
+  const defaultStyle = {color: "blue", fillOpacity: 0, weight: 2}
+
+  const displayName = (county, layer) => {
+    layer.bindPopup(county.properties.NAME)
     layer.on({
-      click: (event) => {
-        setStateView(false);
+      mouseover: (event) => {
+        event.target.setStyle(hoverStyle)
+      },
+      mouseout: (event) => {
+        event.target.setStyle(defaultStyle)
       }
     })
   };
+
   return (
-    stateView ? (
-      <MapContainer center={[38.484726, -98.38017]} zoom={5}>
-        <GeoJSON style={{ fillOpacity: 0, weight: 2 }} data={states.features} onEachFeature={stateName} />
-      </MapContainer>
-    ) : (
-      <MapContainer center={[38.484726, -98.38017]} zoom={8}>
-        <GeoJSON style={{ fillOpacity: 0, weight: 2 }} data={counties.features} onEachFeature={stateName} />
-      </MapContainer>
-    )
+    <MapContainer center={[38.484726, -98.38017]} zoom={5}>
+      <GeoJSON style={defaultStyle} data={counties.features} onEachFeature={displayName} />
+    </MapContainer>
   );
 
 }
