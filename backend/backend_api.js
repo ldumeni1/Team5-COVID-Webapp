@@ -4,7 +4,7 @@ module.exports = {
     
     /*
         parameter: nl_date, callback
-        returns: data array from the national_level table corresponding to nl_date parameter
+        returns: data array from the national_level table corresponding to nl_date
     */
     get_national_level: function(nl_date, callback) {
         
@@ -25,7 +25,7 @@ module.exports = {
 
     /*
         parameter: sl_date, sl_state, callback
-        returns: data array from the state_level table corresponding to sl_date and sl_state parameters
+        returns: data array from the state_level table corresponding to sl_date and sl_state
     */
     get_state_level: function(sl_date, sl_state, callback) {
 
@@ -47,7 +47,7 @@ module.exports = {
 
     /*
         parameter: cl_date, cl_county, cl_state, callback
-        returns: data array from the county_level table corresponding to cl_date, cl_county, and cl_state parameters
+        returns: data array from the county_level table corresponding to cl_date, cl_county, and cl_state
     */
     get_county_level: function(cl_date, cl_county, cl_state, callback) {
 
