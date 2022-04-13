@@ -4,6 +4,7 @@ INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-01-01', 
 INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-02-02', 3000, 1);
 INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-03-03', 4000, 2);
 INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-04-04', 5000, 3);
+INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-05-05', 5000, 3);
 
 INSERT INTO state_level (sl_date, sl_state, sl_fips, sl_cases, sl_deaths) VALUES ('2222-01-01', 'MD', 0, 1000, 10);
 INSERT INTO state_level (sl_date, sl_state, sl_fips, sl_cases, sl_deaths) VALUES ('2222-02-02', 'MD', 1, 2000, 20);
