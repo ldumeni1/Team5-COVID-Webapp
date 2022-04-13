@@ -20,7 +20,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// api to get national level data
+// api to fetch national level data
 app.get('/get_national_level/:nl_date', (req, res) => {
 
   const date = req.params.nl_date;
@@ -34,7 +34,7 @@ app.get('/get_national_level/:nl_date', (req, res) => {
   });
 });
 
-// api to get state level data
+// api to fetch state level data
 app.get('/get_state_level/:sl_date/:sl_state', (req, res) => {
 
   var date = req.params.sl_date;
@@ -49,7 +49,7 @@ app.get('/get_state_level/:sl_date/:sl_state', (req, res) => {
   });
 });
 
-// api to get county level data
+// api to fetch county level data
 app.get('/get_county_level/:cl_date/:cl_state/:cl_county', (req, res) => {
 
   var date = req.params.cl_date;
