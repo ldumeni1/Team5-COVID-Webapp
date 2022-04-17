@@ -1,25 +1,31 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { useEffect, useState } from 'react';
-import Axios from 'axios';
 import { GeoJSON } from 'react-leaflet';
-
+import getData from "./axois.js";
 import counties from "./GeoJson/counties.json"
 import states from "./GeoJson/states.json"
 
 import "./App.css"
 
+
+
 function App() {
 
-  const [view, setView] = useState("state");
+  const [data, setData] = useState({});
 
   const hoverStyle = {color: "black", weight: 4};
   const defaultStyle = {color: "blue", fillOpacity: 0, weight: 2}
 
+  useEffect(()=>{
+    let nat_data = getData('http://localhost:3001/get_national_level/')
+    setData(nat_data);
+  },[])
+
   const displayName = (county, layer) => {
-    layer.bindPopup(county.properties.NAME)
+    layer.bindPopup(data)
     layer.on({
       mouseover: (event) => {
-        event.target.setStyle(hoverStyle)
+        event.target.setStyle(hoverStyle);
       },
       mouseout: (event) => {
         event.target.setStyle(defaultStyle)

@@ -9,7 +9,7 @@ const app = express();
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Anurag#123', // update me
+  password: '5y5t3m100', // update me
   database: 'cases',
 });
 
@@ -21,11 +21,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
 // api to fetch national level data
-app.get('/get_national_level/:nl_date', (req, res) => {
+app.get('/get_national_level/', (req, res) => {
 
   const date = req.params.nl_date;
   
-  const sql_get = "SELECT * FROM national_level WHERE nl_date = ?";
+  const sql_get = "SELECT * FROM national_level";
 
   db.query(sql_get,[date], (err, results, fields) => {
     if(err) throw err;
