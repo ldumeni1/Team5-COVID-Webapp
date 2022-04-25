@@ -5,11 +5,11 @@ import getData from "./axois.js";
 import counties from "./GeoJson/counties.json"
 import states from "./GeoJson/states.json"
 
-import "./App.css"
+import "./Map.css"
 
 
 
-function App() {
+function Map() {
 
   const [cases, setCases] = useState(0);
   const [deaths, setDeaths] = useState(0);
@@ -52,10 +52,10 @@ function App() {
       </Popup>
       <GeoJSON style={defaultStyle} data={counties.features} onEachFeature={selectCounty} />
     </MapContainer>) : (
-    <MapContainer center={[38.484726, -98.38017]} zoom={5}>
+    <MapContainer center={[38.484726, -98.38017]} zoom={3}>
       <GeoJSON style={defaultStyle} data={counties.features} onEachFeature={selectCounty} />
     </MapContainer>)
   );
 
 }
-export default App;
+export default Map;
