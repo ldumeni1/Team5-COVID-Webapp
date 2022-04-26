@@ -10,6 +10,14 @@ const theme = createTheme({
       fontSize: 40,
     },
   },
+  palette: {
+    primary: {
+      main: '#01579b',
+    },
+    secondary: {
+      main: '#424242',
+    },
+  },
 });
 
 ReactDOM.render(
