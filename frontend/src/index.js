@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import HomePage from './HomePage';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme} from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
