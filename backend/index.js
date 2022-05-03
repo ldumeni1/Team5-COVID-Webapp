@@ -15,7 +15,7 @@ const app = express();
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Anurag#123', // update me
+  password: '5y5t3m100', // update me
   database: 'team5_webapp',
 });
 
@@ -90,7 +90,7 @@ app.get('/get_county_level_all/:cl_state/:cl_county', (req, res) => {
   
   db.query(sql_get,[county, state], (err, results, fields) => {
     if(err) throw err;
-    //console.log(results);
+    // console.log(results);
     res.send(results);
   });
 });
@@ -211,5 +211,5 @@ app.get('/get_county_level_vaccination/:cl_date/:cl_state/:cl_county', (req, res
 
 
 app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+  console.log(`server listening on ${PORT}`);
 });

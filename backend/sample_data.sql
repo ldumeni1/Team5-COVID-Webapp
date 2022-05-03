@@ -1,5 +1,4 @@
 USE cases;
-
 INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-01-01', 2000, 0);
 INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-02-02', 3000, 1);
 INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES ('1111-03-03', 4000, 2);
@@ -12,7 +11,7 @@ INSERT INTO state_level (sl_date, sl_state, sl_fips, sl_cases, sl_deaths) VALUES
 INSERT INTO state_level (sl_date, sl_state, sl_fips, sl_cases, sl_deaths) VALUES ('2222-04-04', 'MD', 3, 4000, 40);
 
 INSERT INTO county_level (cl_date, cl_county, cl_state, cl_fips, cl_cases, cl_deaths, cl_confirmed_cases, cl_confirmed_deaths, 
-							cl_probable_cases, cl_probable_deaths ) VALUES ('3333-01-01', 'Howard', 'MD', 0, 1000, 10, 10, 10, 10, 10);
+							cl_probable_cases, cl_probable_deaths ) VALUES ('3333-01-01', 'Howard', 'MD', 0, 1000, 10, 10, 10, 10, 11);
 INSERT INTO county_level (cl_date, cl_county, cl_state, cl_fips, cl_cases, cl_deaths, cl_confirmed_cases, cl_confirmed_deaths, 
 							cl_probable_cases, cl_probable_deaths ) VALUES ('3333-01-01', 'Baltimore', 'MD', 1, 2000, 20, 20, 20, 20, 20);
 INSERT INTO county_level (cl_date, cl_county, cl_state, cl_fips, cl_cases, cl_deaths, cl_confirmed_cases, cl_confirmed_deaths, 

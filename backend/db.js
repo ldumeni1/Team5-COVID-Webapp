@@ -5,30 +5,20 @@ const csv = require('csvtojson');
 const conn = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Anurag#123', // update me
+  password: '5y5t3m100', // update me
 });
 
 
 conn.connect((err) => {
   if (err) {
     console.log("Database Connection Failed !!!", err);
-  } else {
-    console.log("connected to Database");
   }
 });
 
 // creating the database
 function create_db()
 {
-  const drop_db = "Drop DATABASE IF EXISTS team5_webapp;"
-  conn.query(drop_db, (err, result) => {
-    if(err)
-      console.log(err);
-    //else
-      //console.log(result);
-  })
-
-  const create_db = "CREATE DATABASE team5_webapp;"
+  const create_db = "CREATE DATABASE IF NOT EXISTS team5_webapp;"
   conn.query(create_db, (err, result) => {
     if(err)
       console.log(err);
@@ -49,9 +39,10 @@ function create_db()
 function create_national()
 {
   const create_national = "CREATE TABLE IF NOT EXISTS national_level( \
-    nl_date CHAR(10), \
+    nl_date CHAR(10) NOT NULL, \
     nl_cases int, \
-    nl_deaths int);"
+    nl_deaths int,\
+    PRIMARY KEY (nl_date));"
 
   conn.query(create_national, (err, result) => {
     if(err)
@@ -67,6 +58,7 @@ function create_national()
 
     var n_date, n_cases, n_deaths; 
     
+    console.log("inserting national level infection data...");
     for(var i = 0; i < national_json.length; i++)
     {
         n_date = national_json[i].date || 'null';
@@ -76,12 +68,11 @@ function create_national()
         const insert_data = "INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES (?, ?, ?);"
 
         conn.query(insert_data, [n_date, n_cases, n_deaths], (err, result) => {
-          if(err)
+          if(err && err.code != 'ER_DUP_ENTRY')
             console.log(err);
-          else
-            console.log("national level infection data inserted!");
         })
     }
+    console.log("national level infection data inserted!");
   })
 }
 
@@ -89,11 +80,12 @@ function create_national()
 function create_state()
 {
   const create_state = "CREATE TABLE IF NOT EXISTS state_level( \
-    sl_date CHAR(10), \
-    sl_state CHAR(40), \
+    sl_date CHAR(10) NOT NULL, \
+    sl_state CHAR(40) NOT NULL, \
     sl_fips int, \
     sl_cases int, \
-    sl_deaths int);"
+    sl_deaths int, \
+    PRIMARY KEY (sl_date, sl_state));"
 
   conn.query(create_state, (err, result) => {
     if(err)
@@ -108,7 +100,8 @@ function create_state()
   .then(function(state_json){ //when parse finished, result will be emitted here.
    
     var s_date, s_state, s_fips, s_cases, s_deaths;
-      
+    
+    console.log("inserting state level infection data...");
     for(var i = 0; i < state_json.length; i++)
     {
         s_date = state_json[i].date || 'null';
@@ -121,12 +114,11 @@ function create_state()
                               VALUES (?, ?, ?, ?, ?);"
 
         conn.query(insert_data, [s_date, s_state, s_fips, s_cases, s_deaths], (err, result) => {
-          if(err)
+          if(err && err.code != 'ER_DUP_ENTRY')
             console.log(err);
-          else
-            console.log("state level infection data inserted!");
         })
     }
+    console.log("state level infection data inserted!");
   })
 }
 
@@ -134,12 +126,13 @@ function create_state()
 function create_county()
 {  
   const create_county = "CREATE TABLE IF NOT EXISTS county_level( \
-    cl_date CHAR(10), \
-    cl_county CHAR(40), \
-    cl_state CHAR(40), \
+    cl_date CHAR(10) NOT NULL, \
+    cl_county CHAR(40) NOT NULL, \
+    cl_state CHAR(40) NOT NULL, \
     fips int, \
     cl_cases int, \
-    cl_deaths int);"
+    cl_deaths int, \
+    PRIMARY KEY (cl_date, cl_county, cl_state));"
 
   conn.query(create_county, (err, result) => {
     if(err)
@@ -155,6 +148,7 @@ function create_county()
     
     var c_date, c_county, c_state, c_fips, c_cases, c_deaths;
     
+    console.log("inserting county level infection data...");
     for(var i = 0; i < county_json.length; i++)
     {
         c_date = county_json[i].date || 'null';
@@ -168,12 +162,11 @@ function create_county()
                               VALUES (?, ?, ?, ?, ?, ?);"
 
         conn.query(insert_data, [c_date, c_county, c_state, c_fips, c_cases, c_deaths], (err, result) => {
-          if(err)
+          if(err && err.code != 'ER_DUP_ENTRY')
             console.log(err);
-          else
-            console.log("county level infection data inserted");
         })
     }
+    console.log("county level infection data inserted");
   })
 }
 
@@ -182,12 +175,13 @@ function create_county()
 function create_county_vaccination()
 {  
   const create_county = "CREATE TABLE IF NOT EXISTS county_level_vaccination( \
-    cv_date CHAR(10), \
-    cv_county CHAR(40), \
-    cv_state CHAR(40), \
-    cv_category CHAR(40), \
+    cv_date CHAR(10) NOT NULL, \
+    cv_county CHAR(40) NOT NULL, \
+    cv_state CHAR(40) NOT NULL, \
+    cv_category CHAR(40) NOT NULL, \
     cv_fips INT, \
-    cv_total FLOAT);"
+    cv_total FLOAT, \
+    PRIMARY KEY (cv_date, cv_county, cv_state, cv_category));"
 
   conn.query(create_county, (err, result) => {
     if(err)
@@ -202,7 +196,8 @@ function create_county_vaccination()
     //console.log(countyv_json);
     
     var v_date, v_county, v_state, v_category, v_total, v_fips;
-    
+
+    console.log("inserting county level vaccination data...");
     for(var i = 0; i < countyv_json.length; i++)
     {
         v_date = countyv_json[i].DATE || 'null';
@@ -216,13 +211,11 @@ function create_county_vaccination()
           , cv_fips, cv_total) VALUES (?, ?, ?, ?, ?, ?);"
 
         conn.query(insert_data, [v_date, v_county, v_state, v_category, v_fips, v_total], (err, result) => {
-          if(err)
+          if(err && err.code != 'ER_DUP_ENTRY')
             console.log(err);
-          else
-            console.log("county level vaccination data inserted!");
         })
     }
-    
+    console.log("county level vaccination data inserted!");
   })
 }
 
