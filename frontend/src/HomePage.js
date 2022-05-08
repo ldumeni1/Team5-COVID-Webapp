@@ -1,6 +1,7 @@
 import { AppBar, Grid, Typography, Container, Paper, Box} from '@mui/material'
 import Image from 'mui-image';
 import StatCalculations from './StatCalculations'
+import Filters from './Filters'
 //import Map from './Map.js'
 import virus from './1020px-SARS-CoV-2.png'
 
@@ -22,7 +23,7 @@ function HomePage() {
                 <Grid container spacing={5} paddingY={5}>
                     <Grid item xs={3}>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
-                            <Typography variant='h3'>Filters Here</Typography>
+                        <Filters />
                         </Paper>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
                             <StatCalculations />
