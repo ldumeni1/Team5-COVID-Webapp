@@ -9,7 +9,7 @@ import "./Map.css"
 
 
 
-function Map() {
+function Map(props) {
 
   const [cases, setCases] = useState(0);
   const [deaths, setDeaths] = useState(0);
@@ -17,9 +17,9 @@ function Map() {
   const hoverStyle = {color: "black", weight: 4};
   const defaultStyle = {color: "blue", fillOpacity: 0, weight: 2}
 
-  const [selectedCounty, setSelectedCounty] = useState("Howard");
+  
   useEffect(async()=>{
-    const response = await getData('http://localhost:3001/get_county_level/3333-01-01/MD/' + selectedCounty)
+    const response = await getData('http://localhost:3001/get_county_level/3333-01-01/MD/' + props.selectedCounty)
     setCases(response.data[0].cl_cases);
     setDeaths(response.data[0].cl_deaths);
   },[selectedCounty])
@@ -35,7 +35,8 @@ function Map() {
         event.target.setStyle(defaultStyle)
       },
       click: (event) => {
-        setSelectedCounty(county.properties.NAME)
+        props.setSelectedCounty(county.properties.NAME)
+        props.setSelectedState(county.properties.STATE)
         setPopupLocation([event.latlng.lat, event.latlng.lng])
         setPopup(true)
       }
@@ -46,7 +47,7 @@ function Map() {
     popup ? (
     <MapContainer center={popupLocation} zoom={8}>
       <Popup position={popupLocation}>
-        <h2>{selectedCounty}</h2>
+        <h2>{props.selectedCounty}</h2>
         <h4>Number of Cases: {cases}</h4>
         <h4>Number of Deaths: {deaths}</h4>
       </Popup>

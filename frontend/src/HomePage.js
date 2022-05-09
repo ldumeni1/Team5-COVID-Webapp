@@ -1,4 +1,5 @@
 import { AppBar, Grid, Typography, Container, Paper, Box} from '@mui/material'
+import { useEffect, useState } from 'react';
 import Image from 'mui-image';
 import StatCalculations from './StatCalculations'
 import Filters from './Filters'
@@ -6,6 +7,9 @@ import Filters from './Filters'
 import virus from './1020px-SARS-CoV-2.png'
 
 function HomePage() {
+
+    const [selectedCounty, setSelectedCounty] = useState("Howard");
+    const [selectedState, setSelectedState] = useState("Maryland");
 
     return (
         <div style={{ backgroundColor: 'grey' }}>
@@ -23,10 +27,14 @@ function HomePage() {
                 <Grid container spacing={5} paddingY={5}>
                     <Grid item xs={3}>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
-                        <Filters />
+                            <Filters />
                         </Paper>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
-                            <StatCalculations />
+                            <StatCalculations 
+                            selectedCounty={selectedCounty}
+                            setSelectedCounty={setSelectedCounty}
+                            selectedState={selectedState}
+                            setSelectedState={setSelectedState} />
                         </Paper>
                     </Grid>
                     <Grid item xs={9}>

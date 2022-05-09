@@ -95,6 +95,30 @@ app.get('/get_county_level_all/:cl_state/:cl_county', (req, res) => {
   });
 });
 
+app.get('/get_counties_by_state/:cl_state/', (req, res) => {
+
+  var state = req.params.cl_state;
+
+  const sql_get = " SELECT cl_county, cl_state, cl_cases, cl_deaths FROM county_level WHERE cl_state = ?" 
+  
+  db.query(sql_get,[state], (err, results, fields) => {
+    if(err) throw err;
+    res.send(results);
+  });
+});
+
+app.get('/get_counties_vax_by_state/:cl_state/', (req, res) => {
+
+  var state = req.params.cl_state;
+
+  const sql_get = " SELECT cv_county, cv_total FROM county_level_vaccination WHERE cv_state = ? AND cv_category = 'Complete'" 
+  
+  db.query(sql_get,[state], (err, results, fields) => {
+    if(err) throw err;
+    res.send(results);
+  });
+});
+
 
 // *************** apis to fetch deaths ****************** //
 
