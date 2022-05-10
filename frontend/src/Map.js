@@ -13,26 +13,33 @@ function Map(props) {
 
   const [cases, setCases] = useState(0);
   const [deaths, setDeaths] = useState(0);
+  const [vaxes, setVaxes] = useState(0);
 
-  const hoverStyle = {color: "black", weight: 4};
-  const defaultStyle = {color: "blue", fillOpacity: 0, weight: 2}
+  const countyHoverStyle = {color: "blue", weight: 3};
+  const countyDefaultStyle = {color: "black", fillOpacity: 0, weight: 1}
 
-  
   useEffect(async()=>{
-    const response = await getData('http://localhost:3001/get_county_level/3333-01-01/MD/' + props.selectedCounty)
-    setCases(response.data[0].cl_cases);
-    setDeaths(response.data[0].cl_deaths);
-  },[selectedCounty])
+    try{
+      const response = await getData('http://localhost:3001/get_county_level_all/' + props.selectedState + '/' + props.selectedCounty)
+      console.log(response.data);
+      setCases(response.data[0].cl_cases);
+      setDeaths(response.data[0].cl_deaths);
+      setVaxes(response.data[0].cv_total);
+    }catch(e){
+      console.log(e);
+    }
+  },[props.selectedCounty, props.selectedState])
 
   const [popup, setPopup] = useState(false)
   const [popupLocation, setPopupLocation] = useState([])
+
   const selectCounty = (county, layer) => {
     layer.on({
       mouseover: (event) => {
-        event.target.setStyle(hoverStyle);
+        event.target.setStyle(countyHoverStyle);
       },
       mouseout: (event) => {
-        event.target.setStyle(defaultStyle)
+        event.target.setStyle(countyDefaultStyle)
       },
       click: (event) => {
         props.setSelectedCounty(county.properties.NAME)
@@ -50,11 +57,12 @@ function Map(props) {
         <h2>{props.selectedCounty}</h2>
         <h4>Number of Cases: {cases}</h4>
         <h4>Number of Deaths: {deaths}</h4>
+        <h4>Number of Complete Vaccinations: {vaxes}</h4>
       </Popup>
-      <GeoJSON style={defaultStyle} data={counties.features} onEachFeature={selectCounty} />
+      <GeoJSON style={countyDefaultStyle} data={counties.features} onEachFeature={selectCounty} />
     </MapContainer>) : (
     <MapContainer center={[38.484726, -98.38017]} zoom={3}>
-      <GeoJSON style={defaultStyle} data={counties.features} onEachFeature={selectCounty} />
+      <GeoJSON style={countyDefaultStyle} data={counties.features} onEachFeature={selectCounty} />
     </MapContainer>)
   );
 
