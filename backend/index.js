@@ -15,7 +15,8 @@ const app = express();
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '5y5t3m100', // update me
+  //password: '5y5t3m100', // update me
+  password: 'Anurag#123',
   database: 'team5_webapp',
 });
 

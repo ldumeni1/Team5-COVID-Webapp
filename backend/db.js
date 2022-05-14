@@ -1,11 +1,14 @@
 const mysql = require("mysql");
 const csv = require('csvtojson');
+const papa = require('papaparse');
+const {StringStream} = require("scramjet");
+const request = require("request");
 
 // connecting to MySql server
 const conn = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '5y5t3m100', // update me
+  password: 'Anurag#123', // update me
 });
 
 
@@ -22,16 +25,12 @@ function create_db()
   conn.query(create_db, (err, result) => {
     if(err)
       console.log(err);
-    //else
-      //console.log(result);
   })
 
   const use_db = "USE team5_webapp;"
   conn.query(use_db, (err, result) => {
     if(err)
       console.log(err);
-    //else
-      //console.log(result);
   })
 }
 
@@ -47,33 +46,42 @@ function create_national()
   conn.query(create_national, (err, result) => {
     if(err)
       console.log(err);
-    //else
-      //console.log(result);
   })
 
-
-  csv()
-  .fromFile('./data/us.csv')
-  .then(function(national_json){ //when parse finished, result will be emitted here.
-
-    var n_date, n_cases, n_deaths; 
+    // papaparse setup
+    const options = {delimiter: ",", download: true, header: true};
     
-    console.log("inserting national level infection data...");
-    for(var i = 0; i < national_json.length; i++)
-    {
-        n_date = national_json[i].date || 'null';
-        n_cases = national_json[i].cases || null;
-        n_deaths = national_json[i].deaths || null;
-        
-        const insert_data = "INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES (?, ?, ?);"
+    const dataStream = request.get("https://raw.githubusercontent.com/nytimes/covid-19-data/master/live/us.csv");
+    const parseStream = papa.parse(papa.NODE_STREAM_INPUT, options);
+    
+    dataStream.pipe(parseStream);
+    
+    // storing the data in an array
+    let national_json = [];
+    parseStream.on("data", chunk => {
+      national_json.push(chunk);
+    });
 
-        conn.query(insert_data, [n_date, n_cases, n_deaths], (err, result) => {
-          if(err && err.code != 'ER_DUP_ENTRY')
-            console.log(err);
-        })
-    }
-    console.log("national level infection data inserted!");
-  })
+    parseStream.on("finish", () => {
+
+      var n_date, n_cases, n_deaths; 
+    
+      console.log("inserting national level infection data...");
+      for(var i = 0; i < national_json.length; i++)
+      {
+          n_date = national_json[i].date || 'null';
+          n_cases = national_json[i].cases || null;
+          n_deaths = national_json[i].deaths || null;
+          
+          const insert_data = "INSERT INTO national_level (nl_date, nl_cases, nl_deaths) VALUES (?, ?, ?);"
+  
+          conn.query(insert_data, [n_date, n_cases, n_deaths], (err, result) => {
+            if(err && err.code != 'ER_DUP_ENTRY')
+              console.log(err);
+          })
+      }
+      console.log("national level infection data inserted!");
+    });
 }
 
 // creates state_level table
@@ -90,18 +98,29 @@ function create_state()
   conn.query(create_state, (err, result) => {
     if(err)
       console.log(err);
-    //else
-      //console.log(result);
   })
 
+  // papaparse setup
+  const options = {delimiter: ",", download: true, header: true};
+    
+  const dataStream = request.get("https://raw.githubusercontent.com/nytimes/covid-19-data/master/live/us-states.csv");
+  const parseStream = papa.parse(papa.NODE_STREAM_INPUT, options);
+  
+  dataStream.pipe(parseStream);
+  
+  // storing the data in an array
+  let state_json = [];
+  parseStream.on("data", chunk => {
+    state_json.push(chunk);
+  });
+  
+  // inserting the data into sql table
+  parseStream.on("finish", () => {
 
-  csv()
-  .fromFile('./data/us-states.csv')
-  .then(function(state_json){ //when parse finished, result will be emitted here.
-   
     var s_date, s_state, s_fips, s_cases, s_deaths;
     
     console.log("inserting state level infection data...");
+
     for(var i = 0; i < state_json.length; i++)
     {
         s_date = state_json[i].date || 'null';
@@ -119,7 +138,7 @@ function create_state()
         })
     }
     console.log("state level infection data inserted!");
-  })
+  });
 }
 
 // creates county_level table
@@ -137,15 +156,25 @@ function create_county()
   conn.query(create_county, (err, result) => {
     if(err)
       console.log(err);
-    //else
-      //console.log(result);
   })
 
-
-  csv()
-  .fromFile('./data/us-counties.csv')
-  .then(function(county_json){ //when parse finished, result will be emitted here.
+   // papaparse setup
+   const options = {delimiter: ",", download: true, header: true};
     
+   const dataStream = request.get("https://raw.githubusercontent.com/nytimes/covid-19-data/master/live/us-counties.csv");
+   const parseStream = papa.parse(papa.NODE_STREAM_INPUT, options);
+   
+   dataStream.pipe(parseStream);
+   
+   // storing the data in an array
+   let county_json = [];
+   parseStream.on("data", chunk => {
+    county_json.push(chunk);
+   });
+
+  // inserting the data into sql table
+  parseStream.on("finish", () => {
+
     var c_date, c_county, c_state, c_fips, c_cases, c_deaths;
     
     console.log("inserting county level infection data...");
@@ -167,7 +196,7 @@ function create_county()
         })
     }
     console.log("county level infection data inserted");
-  })
+  });
 }
 
 
@@ -186,15 +215,26 @@ function create_county_vaccination()
   conn.query(create_county, (err, result) => {
     if(err)
       console.log(err);
-    //else
-      //console.log(result);
   })
 
-  csv()
-  .fromFile('./data/data_county_current.csv')
-  .then(function(countyv_json){ //when parse finished, result will be emitted here.
-    //console.log(countyv_json);
+   // papaparse setup
+   const options = {delimiter: ",", download: true, header: true};
     
+   const dataStream = request.get("https://raw.githubusercontent.com/bansallab/vaccinetracking/main/vacc_data/data_county_current.csv");
+   const parseStream = papa.parse(papa.NODE_STREAM_INPUT, options);
+   
+   dataStream.pipe(parseStream);
+   
+   // storing the data in an array
+   let countyv_json = [];
+   parseStream.on("data", chunk => {
+    countyv_json.push(chunk);
+   });
+
+
+   // inserting the data into sql table
+  parseStream.on("finish", () => {
+
     var v_date, v_county, v_state, v_category, v_total, v_fips;
 
     console.log("inserting county level vaccination data...");
@@ -216,20 +256,18 @@ function create_county_vaccination()
         })
     }
     console.log("county level vaccination data inserted!");
-  })
+  });
 }
 
 module.exports = {
-
-create_tables: function()
-{
-    create_db();
-    create_national();
-    create_state();
-    create_county();
-    create_county_vaccination();
-}
-
+  create_tables: function()
+  {
+      create_db();
+      create_national();
+      create_state();
+      create_county();
+      create_county_vaccination();
+  }
 };
 
 
