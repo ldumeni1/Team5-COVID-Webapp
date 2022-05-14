@@ -74,6 +74,26 @@ app.get('/get_county_level/:cl_date/:cl_state/:cl_county', (req, res) => {
 });
 */
 
+app.get('/get_national_level', (req, res) => {
+
+  const sql_get = " SELECT * FROM national_level" 
+  
+  db.query(sql_get, (err, results, fields) => {
+    if(err) throw err;
+    res.send(results);
+  });
+});
+
+app.get('/get_most_recent_state_level', (req, res) => {
+
+  const sql_get = "SELECT * FROM state_level WHERE sl_date = (SELECT max(sl_date) FROM state_level)" 
+  
+  db.query(sql_get, (err, results, fields) => {
+    if(err) throw err;
+    res.send(results);
+  });
+});
+
 // api to fetch county level cases, deaths, vaccination data 
 app.get('/get_county_level_all/:cl_state/:cl_county', (req, res) => {
 
