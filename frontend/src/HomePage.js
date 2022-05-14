@@ -11,6 +11,12 @@ function HomePage() {
     const [selectedCounty, setSelectedCounty] = useState("Howard");
     const [selectedState, setSelectedState] = useState("Maryland");
 
+    const [casesFilter, setCasesFilter] = useState(true);
+    const [deathsFilter, setDeathsFilter] = useState(true);
+    const [vaxFilter, setVaxFilter] = useState(true);
+
+
+
     return (
         <div style={{ backgroundColor: 'grey' }}>
             <AppBar position='relative' color='primary'>
@@ -27,7 +33,12 @@ function HomePage() {
                 <Grid container spacing={5} paddingY={5}>
                     <Grid item xs={3}>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
-                            <Filters />
+                            <Filters 
+                                
+                                setCasesFilter={setCasesFilter}
+                                setDeathsFilter={setDeathsFilter}
+                                setVaxFilter={setVaxFilter}
+                            />
                         </Paper>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
                             <StatCalculations 
@@ -40,6 +51,9 @@ function HomePage() {
                     <Grid item xs={9}>
                         <Paper elevation={24}>
                             <Map
+                            casesFilter={casesFilter}
+                            deathsFilter={deathsFilter}
+                            vaxFilter={vaxFilter}
                             selectedCounty={selectedCounty}
                             setSelectedCounty={setSelectedCounty}
                             selectedState={selectedState}
