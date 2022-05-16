@@ -88,10 +88,10 @@ return (
   popup ? (
     <MapContainer center={popupLocation} zoom={8}>
       <Popup position={popupLocation}>
-        <h2>{props.selectedCounty}</h2>
-        <h4>Number of Cases: {cases}</h4>
-        <h4>Number of Deaths: {deaths}</h4>
-        <h4>Number of Complete Vaccinations: {vaxes}</h4>
+        <h2>{props.selectedCounty}</h2>       
+        {props.casesFilter ? (<h4>Number of Cases: {cases}</h4>) : (null)}
+        {props.deathsFilter ? (<h4>Number of Deaths: {deaths}</h4>) : (null)}
+        {props.vaxFilter ? (<h4>Number of Complete Vaccinations: {vaxes}</h4>) : (null)}
       </Popup>
       <GeoJSON data={states.features} onEachFeature={selectState} />
       <GeoJSON style={countyDefaultStyle} data={counties.features} onEachFeature={selectCounty} />

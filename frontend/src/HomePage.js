@@ -12,6 +12,7 @@ function HomePage() {
     const [selectedCounty, setSelectedCounty] = useState("Howard");
     const [selectedState, setSelectedState] = useState("Maryland");
 
+<<<<<<< HEAD
     const [natCases, setNatCases] = useState(0);
     const [natDeaths, setNatDeaths] = useState(0);
     useEffect(async () => {
@@ -23,6 +24,13 @@ function HomePage() {
             console.log(e);
         }
     }, [])
+=======
+    const [casesFilter, setCasesFilter] = useState(true);
+    const [deathsFilter, setDeathsFilter] = useState(true);
+    const [vaxFilter, setVaxFilter] = useState(true);
+
+
+>>>>>>> 2a386b8fe54b0b6578637f1bf53d70ce9faad5df
 
     return (
         <div style={{ backgroundColor: 'grey' }}>
@@ -40,7 +48,12 @@ function HomePage() {
                 <Grid container spacing={5} paddingY={5}>
                     <Grid item xs={3}>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
-                            <Filters />
+                            <Filters 
+                                
+                                setCasesFilter={setCasesFilter}
+                                setDeathsFilter={setDeathsFilter}
+                                setVaxFilter={setVaxFilter}
+                            />
                         </Paper>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
                             <StatCalculations
@@ -56,10 +69,20 @@ function HomePage() {
                             <Typography>U.S Cases: <b>{natCases}</b> U.S Deaths: <b>{natDeaths}</b></Typography>
                         </Paper>
                             <Map
+<<<<<<< HEAD
                                 selectedCounty={selectedCounty}
                                 setSelectedCounty={setSelectedCounty}
                                 selectedState={selectedState}
                                 setSelectedState={setSelectedState} />
+=======
+                            casesFilter={casesFilter}
+                            deathsFilter={deathsFilter}
+                            vaxFilter={vaxFilter}
+                            selectedCounty={selectedCounty}
+                            setSelectedCounty={setSelectedCounty}
+                            selectedState={selectedState}
+                            setSelectedState={setSelectedState}/>
+>>>>>>> 2a386b8fe54b0b6578637f1bf53d70ce9faad5df
                             {/* <Box width='72vw' height='70vh' backgroundColor='blue'><b>This will be the map</b></Box> */}
                         </Paper>
                     </Grid>
