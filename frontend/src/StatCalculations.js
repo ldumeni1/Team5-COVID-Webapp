@@ -30,7 +30,7 @@ function StatCalculations(props) {
         setVaxData(response.data);
       },[props.selectedState]
     )
-    let statCounty = '';
+    const [statCounty, setStatCounty] = useState('');
     const [calculatedStat, setCalculatedStat] = useState(0);
     useEffect(()=>{
         switch(calc){
@@ -48,27 +48,23 @@ function StatCalculations(props) {
                         count++;
                     } 
                 }
+                setStatCounty('')
                 setCalculatedStat(total/count)
                 break;
-            // case 'Median':
-            //     for(let county of data){
-                    
-            //     }
-            //     break;
             case 'Max Value':
                 let max = Number.MIN_SAFE_INTEGER
                 if(dataType == 'cv_total'){
                     for(let county of vaxData){
                         if(county[dataType] > max){
                             max = county[dataType]
-                            statCounty = county['cv_county']
+                            setStatCounty(county['cv_county'])
                         }
                     }
                 }else{
                     for(let county of data){
                         if(county[dataType] > max){
                             max = county[dataType]
-                            statCounty = county['cl_county']
+                            setStatCounty(county['cl_county'])
                         }
                     }  
                 }
@@ -80,14 +76,14 @@ function StatCalculations(props) {
                     for(let county of vaxData){
                         if(county[dataType] < min){
                             min = county[dataType]
-                            statCounty = county['cv_county']
+                            setStatCounty(county['cv_county'])
                         }
                     }
                 }else{
                     for(let county of data){
                         if(county[dataType] < min){
                             min = county[dataType]
-                            statCounty = county['cl_county']
+                            setStatCounty(county['cl_county'])
                         }
                     } 
                 }
@@ -114,14 +110,13 @@ function StatCalculations(props) {
                     onChange={handleCalcChange}
                 >
                     <FormControlLabel value="Average" control={<Radio />} label="Average" />
-                    {/* <FormControlLabel value="Median" control={<Radio />} label="Median" /> */}
                     <FormControlLabel value="Max Value" control={<Radio />} label="Max Value" />
                     <FormControlLabel value="Min Value" control={<Radio />} label="Min Value" />
                 </RadioGroup>
             </FormControl>
             <Divider />
-            {(dataSelected && calcSelected) ? (<Typography><b>{calc}:</b> {calculatedStat}</Typography>) : 
-            (<Typography><i>Select A Group Of Data For {props.selectedState} And A Calculation</i></Typography>)}
+            {(dataSelected && calcSelected) ? (statCounty ? (<Typography><b>{calc}:</b> {calculatedStat} ({statCounty})</Typography>) : (<Typography><b>{calc}:</b> {calculatedStat}</Typography>)) : 
+            (props.selectedState ? (<Typography><i>Select A Group Of Data For {props.selectedState} And A Calculation</i></Typography>):(<Typography><i>Select A County On The Map To Calculate Stats For Its State</i></Typography>))}
         </Box>
     );
 } export default StatCalculations

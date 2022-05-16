@@ -8,7 +8,7 @@ const request = require("request");
 const conn = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'Anurag#123', // update me
+  password: '5y5t3m100', // update me
 });
 
 

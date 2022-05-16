@@ -9,28 +9,33 @@ import virus from './1020px-SARS-CoV-2.png'
 
 function HomePage() {
 
-    const [selectedCounty, setSelectedCounty] = useState("Howard");
-    const [selectedState, setSelectedState] = useState("Maryland");
+    const [selectedCounty, setSelectedCounty] = useState('Baltimore');
+    const [selectedState, setSelectedState] = useState('Maryland');
 
-<<<<<<< HEAD
-    const [natCases, setNatCases] = useState(0);
-    const [natDeaths, setNatDeaths] = useState(0);
-    useEffect(async () => {
-        try {
-            const response = await getData('http://localhost:3001/get_national_level')
-            setNatCases(response.data[0].nl_cases);
-            setNatDeaths(response.data[0].nl_deaths);
-        } catch (e) {
-            console.log(e);
-        }
-    }, [])
-=======
     const [casesFilter, setCasesFilter] = useState(true);
     const [deathsFilter, setDeathsFilter] = useState(true);
     const [vaxFilter, setVaxFilter] = useState(true);
 
-
->>>>>>> 2a386b8fe54b0b6578637f1bf53d70ce9faad5df
+    const [natCases, setNatCases] = useState(0);
+    const [natDeaths, setNatDeaths] = useState(0);
+    const [stateCases, setStateCases] = useState(0);
+    const [stateDeaths, setStateDeaths] = useState(0);
+    useEffect(async () => {
+        try {
+            let response = await getData('http://localhost:3001/get_national_level')
+            setNatCases(response.data[response.data.length - 1].nl_cases);
+            setNatDeaths(response.data[response.data.length - 1].nl_deaths);
+            response = await getData('http://localhost:3001/get_most_recent_state_level')
+            for(let state of response.data){
+                if (state.sl_state == selectedState){
+                    setStateCases(state.sl_cases);
+                    setStateDeaths(state.sl_deaths);
+                }
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }, [selectedState])
 
     return (
         <div style={{ backgroundColor: 'grey' }}>
@@ -49,7 +54,6 @@ function HomePage() {
                     <Grid item xs={3}>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
                             <Filters 
-                                
                                 setCasesFilter={setCasesFilter}
                                 setDeathsFilter={setDeathsFilter}
                                 setVaxFilter={setVaxFilter}
@@ -66,15 +70,12 @@ function HomePage() {
                     <Grid item xs={9}>
                         <Paper elevation={24}>
                         <Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
-                            <Typography>U.S Cases: <b>{natCases}</b> U.S Deaths: <b>{natDeaths}</b></Typography>
+                            <Typography align='center'>U.S Cases: <b>{natCases}</b> U.S Deaths: <b>{natDeaths}</b></Typography>
                         </Paper>
+                        {selectedState ? (<Paper style={{ backgroundColor: 'whitesmoke' }} elevation={10}>
+                            <Typography align='center'>{selectedState} Cases: <b>{stateCases}</b> {selectedState} Deaths: <b>{stateDeaths}</b></Typography>
+                        </Paper>) : (null)}
                             <Map
-<<<<<<< HEAD
-                                selectedCounty={selectedCounty}
-                                setSelectedCounty={setSelectedCounty}
-                                selectedState={selectedState}
-                                setSelectedState={setSelectedState} />
-=======
                             casesFilter={casesFilter}
                             deathsFilter={deathsFilter}
                             vaxFilter={vaxFilter}
@@ -82,8 +83,6 @@ function HomePage() {
                             setSelectedCounty={setSelectedCounty}
                             selectedState={selectedState}
                             setSelectedState={setSelectedState}/>
->>>>>>> 2a386b8fe54b0b6578637f1bf53d70ce9faad5df
-                            {/* <Box width='72vw' height='70vh' backgroundColor='blue'><b>This will be the map</b></Box> */}
                         </Paper>
                     </Grid>
                 </Grid>
