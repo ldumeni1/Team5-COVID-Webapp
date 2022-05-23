@@ -1,7 +1,7 @@
 import { Box, FormControl, FormLabel, FormControlLabel, RadioGroup,
      Radio, Divider, Typography } from '@mui/material'
 import { useEffect, useState } from 'react';
-import getData from "./axois.js";
+import getData from "./axios.js";
 
 
 function StatCalculations(props) {

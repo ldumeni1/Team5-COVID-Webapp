@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { useEffect, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
-import getData from "./axois.js";
+import getData from "./axios.js";
 import counties from "./GeoJson/counties.json"
 import states from "./GeoJson/states.json"
 

@@ -1,6 +1,6 @@
 import { AppBar, Grid, Typography, Container, Paper, Box } from '@mui/material'
 import { useEffect, useState } from 'react';
-import getData from "./axois.js";
+import getData from "./axios.js";
 import Image from 'mui-image';
 import StatCalculations from './StatCalculations'
 import Filters from './Filters'
